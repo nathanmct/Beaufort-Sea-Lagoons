@@ -9,8 +9,10 @@ JAGS must be installed on your computer to run some of these scripts. Install it
 
 Some of the analysis scripts have been borrowed from other sources:
 
-McTigue & Dunton (2017) --> see github.com/nathanmct/Chukchi-Sea-SIA
-From Andrew Parnell's GitHub for simmr (https://github.com/andrewcparnell/simmr/tree/master/R). The functionality is the same, but I have altered some of the ggplot code to change the output visualization.
+  McTigue & Dunton (2017) --> see https://github.com/nathanmct/Chukchi-Sea-trophodynamics
+
+  From Andrew Parnell's GitHub for simmr (https://github.com/andrewcparnell/simmr/tree/master/R). The functionality is the same, but I have altered some of the ggplot code to change the output visualization.
+
 Much of it has been modified for our own purposes, but we acknowledge and thank these sources for their open-source code. The script outlines the analysis and visualization of the stable isotope analysis in the paper.
 
 File descriptions:
@@ -23,3 +25,10 @@ corrections.csv contains the trophic enrichment factors for each end-member for 
 corrections.higherTL.csv contains the trophic enrichment factors for each end-member for Fish.
 corrections.mammTL.csv contains the trophic enrichment factors for each end-member for Mam/Carn.
 
+The following are files used to place rectangles and labels in Fig. 4
+MPB_polygons.csv
+MPB_Label.csv
+Shelf_polygons.csv
+POM_Label.csv
+Terrestrial_Label.csv
+Terrestrial_polygons.csv
