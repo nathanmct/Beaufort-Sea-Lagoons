@@ -1,4 +1,4 @@
-# Beaufort-Sea-Lagoons
+# Beaufort Sea Lagoons Food Webs - Stable Isotope Analysis
 Supplementary Materials for Harris et al. (2018)  
 Do high Arctic coastal food webs rely on a terrestrial carbon subsidy?  
 *Food Webs*
