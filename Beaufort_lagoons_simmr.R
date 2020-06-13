@@ -523,7 +523,6 @@ simmr_groups_beluga <- simmr_load(mixtures=mix.beluga,
 #run MCMC for each group
 #need JAGS loaded on computer
 #should take <1 minute for each line
-source("simmrmcmc.r")
 susp_out = simmr_mcmc(simmr_groups_susp)
 depo_out = simmr_mcmc(simmr_groups_depo)
 omni_out = simmr_mcmc(simmr_groups_omni)
@@ -537,10 +536,6 @@ beluga_out = simmr_mcmc(simmr_groups_beluga)
 ##  Visually assess convergence of chains and make note of Gelman diagnostics  ##
 #################################################################################
 
-plot(susp_out, type = 'convergence')
-plot(depo_out, type = 'convergence')
-plot(omni_out, type = 'convergence')
-plot(fish_out, type = 'convergence')
 summary(susp_out, type = "diagnostics")
 summary(depo_out, type = "diagnostics")
 summary(omni_out, type = "diagnostics")
@@ -553,27 +548,29 @@ plot(depo_out, type='matrix', group=1:max(grp.depo))
 plot(omni_out, type='matrix', group=1:max(grp.omni))
 plot(fish_out, type='matrix', group=1:max(grp.fish))
 plot(mamm_out, type='matrix', group=1:max(grp.mamm))
+                
+#can also use type = “isospace”, “histogram”, “density”, “boxplot” for different visualizations
 
 #obtain 95% credible intervals...
 #save each as its own object so we can pull out values later to make a new df
 #the new df will be used for graphing
 #can save each obejct as xlsx and read in later so you don't have to re-run simmr
-susp.summ <- summary.simmr_output(susp_out, type=c("quantiles"), group=c(1:max(susp$Code)))
+susp.summ <- summary(susp_out, type=c("quantiles"), group=c(1:max(susp$Code)))
 #write.xlsx(susp.summ, "simmr_susp_summary.xlsx")
 
-depo.summ <- summary.simmr_output(depo_out, type=c("quantiles"), group=c(1:max(depo$Code)))
+depo.summ <- summary(depo_out, type=c("quantiles"), group=c(1:max(depo$Code)))
 #write.xlsx(depo.summ, "simmr_depo_summary.xlsx")
 
-omni.summ <- summary.simmr_output(omni_out, type=c("quantiles"), group=c(1:max(omni$Code)))
+omni.summ <- summary(omni_out, type=c("quantiles"), group=c(1:max(omni$Code)))
 #write.xlsx(omni.summ, "simmr_omni_summary.xlsx")
 
-fish.summ <- summary.simmr_output(fish_out, type = c("quantiles"), group = c(1:max(fish$Code)))
+fish.summ <- summary(fish_out, type = c("quantiles"), group = c(1:max(fish$Code)))
 #write.xlsx(fish.summ, "simmr_fish_summary.xlsx")
 
-mamm.summ <- summary.simmr_output(mamm_out, type = c("quantiles"), group = 1)
+mamm.summ <- summary(mamm_out, type = c("quantiles"), group = 1)
 #write.xlsx(mamm.summ, "simmr_mamm_summary.xlsx")
 
-beluga.summ <- summary.simmr_output(beluga_out, type = c("quantiles"), group = 1)
+beluga.summ <- summary(beluga_out, type = c("quantiles"), group = 1)
 
 
 
@@ -596,7 +593,7 @@ colnames(depo.MPB) <- bpnames
 #location in list where quantiles are stored
 #selects quantiles for each genus and puts in new df
 for (i in 1:max(depo$Code)) {
-  depo.MPB[i,] <- (depo.summ[[2]][[i]][1,])
+  depo.MPB[i,] <- (depo.summ[[2]][[i]][2,])
 }
 
 depo.names <- data.frame(matrix(levels(depo$Genus), ncol = 1))
@@ -612,7 +609,7 @@ susp.MPB <- data.frame(matrix(NA, nrow = max(susp$Code), ncol = 5))
 colnames(susp.MPB) <- bpnames
 
 for (i in 1:max(susp$Code)) {
-  susp.MPB[i,] <- (susp.summ[[2]][[i]][1,])
+  susp.MPB[i,] <- (susp.summ[[2]][[i]][2,])
 }
 
 susp.names <- data.frame(matrix(levels(susp$Genus), ncol = 1))
@@ -629,7 +626,7 @@ omni.MPB <- data.frame(matrix(NA, nrow = max(omni$Code), ncol = 5))
 colnames(omni.MPB) <- bpnames
 
 for (i in 1:max(omni$Code)) {
-  omni.MPB[i,] <- (omni.summ[[2]][[i]][1,])
+  omni.MPB[i,] <- (omni.summ[[2]][[i]][2,])
 }
 
 omni.names <- data.frame(matrix(levels(omni$Genus), ncol = 1))
@@ -646,7 +643,7 @@ fish.MPB <- data.frame(matrix(NA, nrow = max(fish$Code), ncol = 5))
 colnames(fish.MPB) <- bpnames
 
 for (i in 1:max(fish$Code)) {
-  fish.MPB[i,] <- (fish.summ[[2]][[i]][1,])
+  fish.MPB[i,] <- (fish.summ[[2]][[i]][2,])
 }
 
 fish.names <- data.frame(matrix(levels(fish$Genus), ncol = 1))
@@ -708,7 +705,7 @@ bpnames <-  c("min", "low", "mid", "top", "max")
 colnames(depo.Shelf) <- bpnames
 
 for (i in 1:max(depo$Code)) {
-  depo.Shelf[i,] <- (depo.summ[[2]][[i]][2,])
+  depo.Shelf[i,] <- (depo.summ[[2]][[i]][3,])
 }
 
 depo.names <- data.frame(matrix(levels(depo$Genus), ncol = 1))
@@ -724,7 +721,7 @@ susp.Shelf <- data.frame(matrix(NA, nrow = max(susp$Code), ncol = 5))
 colnames(susp.Shelf) <- bpnames
 
 for (i in 1:max(susp$Code)) {
-  susp.Shelf[i,] <- (susp.summ[[2]][[i]][2,])
+  susp.Shelf[i,] <- (susp.summ[[2]][[i]][3,])
 }
 
 susp.names <- data.frame(matrix(levels(susp$Genus), ncol = 1))
@@ -741,7 +738,7 @@ omni.Shelf <- data.frame(matrix(NA, nrow = max(omni$Code), ncol = 5))
 colnames(omni.Shelf) <- bpnames
 
 for (i in 1:max(omni$Code)) {
-  omni.Shelf[i,] <- (omni.summ[[2]][[i]][2,])
+  omni.Shelf[i,] <- (omni.summ[[2]][[i]][3,])
 }
 
 omni.names <- data.frame(matrix(levels(omni$Genus), ncol = 1))
@@ -758,7 +755,7 @@ fish.Shelf <- data.frame(matrix(NA, nrow = max(fish$Code), ncol = 5))
 colnames(fish.Shelf) <- bpnames
 
 for (i in 1:max(fish$Code)) {
-  fish.Shelf[i,] <- (fish.summ[[2]][[i]][2,])
+  fish.Shelf[i,] <- (fish.summ[[2]][[i]][3,])
 }
 
 fish.names <- data.frame(matrix(levels(fish$Genus), ncol = 1))
@@ -811,7 +808,7 @@ bpnames <-  c("min", "low", "mid", "top", "max")
 colnames(depo.Terrestrial) <- bpnames
 
 for (i in 1:max(depo$Code)) {
-  depo.Terrestrial[i,] <- (depo.summ[[2]][[i]][3,])
+  depo.Terrestrial[i,] <- (depo.summ[[2]][[i]][4,])
 }
 
 depo.names <- data.frame(matrix(levels(depo$Genus), ncol = 1))
@@ -827,7 +824,7 @@ susp.Terrestrial <- data.frame(matrix(NA, nrow = max(susp$Code), ncol = 5))
 colnames(susp.Terrestrial) <- bpnames
 
 for (i in 1:max(susp$Code)) {
-  susp.Terrestrial[i,] <- (susp.summ[[2]][[i]][3,])
+  susp.Terrestrial[i,] <- (susp.summ[[2]][[i]][4,])
 }
 
 susp.names <- data.frame(matrix(levels(susp$Genus), ncol = 1))
@@ -844,7 +841,7 @@ omni.Terrestrial <- data.frame(matrix(NA, nrow = max(omni$Code), ncol = 5))
 colnames(omni.Terrestrial) <- bpnames
 
 for (i in 1:max(omni$Code)) {
-  omni.Terrestrial[i,] <- (omni.summ[[2]][[i]][3,])
+  omni.Terrestrial[i,] <- (omni.summ[[2]][[i]][4,])
 }
 
 omni.names <- data.frame(matrix(levels(omni$Genus), ncol = 1))
@@ -861,7 +858,7 @@ fish.Terrestrial <- data.frame(matrix(NA, nrow = max(fish$Code), ncol = 5))
 colnames(fish.Terrestrial) <- bpnames
 
 for (i in 1:max(fish$Code)) {
-  fish.Terrestrial[i,] <- (fish.summ[[2]][[i]][3,])
+  fish.Terrestrial[i,] <- (fish.summ[[2]][[i]][4,])
 }
 
 fish.names <- data.frame(matrix(levels(fish$Genus), ncol = 1))
@@ -919,7 +916,7 @@ dev.off()
 #mamm.MPB <- data.frame(matrix(NA, nrow = max(mamm$Code), ncol = 5))
 #colnames(mamm.MPB) <- bpnames
 #for (i in 1:max(mamm$Code)) {
-#  mamm.MPB[i,] <- (mamm.summ[[2]][[i]][1,])
+#  mamm.MPB[i,] <- (mamm.summ[[2]][[i]][2,])
 #}
 #mamm.names <- data.frame(matrix(levels(mamm$Genus), ncol = 1))
 #colnames(mamm.names) <- "Genus"
